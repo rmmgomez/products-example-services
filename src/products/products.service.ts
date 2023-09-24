@@ -66,6 +66,12 @@ export class ProductsService {
 
   async updateRating(id: number, rating: UpdateRatingDto) {
     const prod = await this.productRepo.findOne(id);
+    if (!prod) {
+      throw new NotFoundException({
+        status: 404,
+        error: 'Product not found',
+      });
+    }
     prod.rating = rating.rating;
     await this.productRepo.getEntityManager().persistAndFlush(prod);
   }
