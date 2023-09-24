@@ -15,17 +15,27 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
 import { Request } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private configService: ConfigService,
+  ) {}
 
   @Get('')
   async getProducts(@Req() req: Request) {
     const products = await this.productsService.getProducts();
     return {
       products: products.map((p) => {
-        p.imageUrl = req.protocol + '://' + req.headers.host + '/' + p.imageUrl;
+        p.imageUrl =
+          req.protocol +
+          '://' +
+          req.headers.host +
+          '/' +
+          this.configService.get<string>('basePath') +
+          p.imageUrl;
         return p;
       }),
     };
@@ -35,7 +45,12 @@ export class ProductsController {
   async getProduct(@Param('id') id, @Req() req: Request) {
     const product = await this.productsService.getProduct(id);
     product.imageUrl =
-      req.protocol + '://' + req.headers.host + '/' + product.imageUrl;
+      req.protocol +
+      '://' +
+      req.headers.host +
+      '/' +
+      this.configService.get<string>('basePath') +
+      product.imageUrl;
     return { product };
   }
 
@@ -46,7 +61,12 @@ export class ProductsController {
   ) {
     const product = await this.productsService.insertProduct(prodDto);
     product.imageUrl =
-      req.protocol + '://' + req.headers.host + '/' + product.imageUrl;
+      req.protocol +
+      '://' +
+      req.headers.host +
+      '/' +
+      this.configService.get<string>('basePath') +
+      product.imageUrl;
     return { product };
   }
 
@@ -58,7 +78,12 @@ export class ProductsController {
   ) {
     const product = await this.productsService.updateProduct(id, prodDto);
     product.imageUrl =
-      req.protocol + '://' + req.headers.host + '/' + product.imageUrl;
+      req.protocol +
+      '://' +
+      req.headers.host +
+      '/' +
+      this.configService.get<string>('basePath') +
+      product.imageUrl;
     return { product };
   }
 
