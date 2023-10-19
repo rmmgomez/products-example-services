@@ -4,7 +4,7 @@ import { Product } from './entity/product.entity';
 export default {
   entities: [Product],
   type: 'mariadb', // one of `mongo` | `mysql` | `mariadb` | `postgresql` | `sqlite`
-  dbName: process.env.DB_DATABASE || 'products_angular',
+  dbName: process.env.DB_DATABASE || 'products_example',
   user: process.env.DB_USERNAME || 'root',
   password: process.env.DB_PASSWORD || '',
   host: process.env.DB_SERVER_HOST || 'localhost',
